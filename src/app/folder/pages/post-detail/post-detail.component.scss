@@ -1,0 +1,15 @@
+ion-content {
+    ion-card-title {
+        font-size: 15px;
+        color: var(--ion-color-primary-shade);
+    }
+
+    ion-card-content {
+        font-size: 13px;
+        text-align: justify;
+
+        img {
+            width: 100%;
+        }
+    }
+}

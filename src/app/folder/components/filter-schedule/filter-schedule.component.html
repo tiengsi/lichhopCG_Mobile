@@ -1,0 +1,45 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Lọc Lịch Họp</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismissModal()">Đóng</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content fullscreen>
+  <ion-item>
+    <ion-select interface="popover" [compareWith]="compareWith" value="{{hostSelected}}" (ionChange)="onSelectHost($event.detail.value)">
+      <ion-select-option *ngFor="let item of hosts" value="{{item.id}}">
+        {{ item.fullName }}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-item>
+    <ion-input
+        name="txtHost"
+        type="text"
+        placeholder="Nhập địa điểm"
+        [(ngModel)]="position"
+        required
+      ></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-select interface="popover" [compareWith]="compareWith" value="{{weekSelected}}" (ionChange)="onSelectWeek($event.detail.value)">
+      <ion-select-option *ngFor="let item of weeks" value="{{item.id}}">
+        {{ item.name }}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-item>
+    {{ startDateOfWeek | date: "dd/MM/yyyy" }} - {{ endDateOfWeek | date: "dd/MM/yyyy" }}
+  </ion-item>
+  <ion-button
+      expand="block"
+      type="submit"
+      shape="round"
+      (click)="onFilter()"
+    >
+      Tìm Kiếm
+      </ion-button
+    >
+</ion-content>

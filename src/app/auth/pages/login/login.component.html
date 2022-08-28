@@ -1,0 +1,40 @@
+<ion-content>
+  <div id="header">
+    <h3>HỆ THỐNG LỊCH HỌP HUYỆN CẦN GIỜ</h3>
+    <a [routerLink]="'/'">
+      <img src="assets/logo/logo_cangio.png" alt="Huyện Cần Giờ" /></a>
+    
+  </div>
+
+  <form id="form" [formGroup]="loginForm" (ngSubmit)="login()">
+    <ion-item class="ion-margin-bottom">
+      <ion-input
+        name="username"
+        type="text"
+        formControlName="username"
+        placeholder="Tài khoản"
+        required
+      ></ion-input>
+    </ion-item>
+    <ion-item class="ion-margin-bottom">
+      <ion-input
+        name="password"
+        type="password"
+        formControlName="password"
+        placeholder="Mật khẩu"
+        required
+      ></ion-input>
+    </ion-item>
+    <ion-button
+      expand="block"
+      type="submit"
+      [disabled]="loading"
+      shape="round"
+      (click)="login()"
+    >
+      Đăng Nhập
+      <ion-spinner *ngIf="loading"></ion-spinner>
+      </ion-button
+    >
+  </form>
+</ion-content>

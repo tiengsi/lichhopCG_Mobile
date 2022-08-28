@@ -1,0 +1,7 @@
+{
+  "name": "scheduleMobileApp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

@@ -1,0 +1,22 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-back-button defaultHref="/" icon="chevron-back-outline" text="Quay lại"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true">
+  <ion-card *ngIf="post">
+    <ion-card-header>
+      <ion-card-title>
+        {{ post.title }}
+      </ion-card-title>
+    </ion-card-header>
+    <img src="{{post.imagePath}}" />
+    <ion-card-content [innerHTML]="post.body">
+    </ion-card-content>
+  </ion-card>
+</ion-content>

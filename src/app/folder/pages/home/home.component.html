@@ -1,0 +1,235 @@
+<ion-header [translucent]="true">
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+
+        <ion-grid>
+            <ion-row>
+                <ion-col>
+                    <div>
+                        Lịch họp - Tuần {{ weekSelected }}
+                        <a class="search" color="" size="small" (click)="presentModal()">
+                            <span class="icon-search">  <ion-icon name="funnel"></ion-icon></span>
+                        </a>
+                    </div>
+                    <div class="week" size="8">
+                        {{ startDateOfWeek | date: "dd/MM/yyyy" }} -
+                        {{ endDateOfWeek | date: "dd/MM/yyyy" }}
+                    </div>
+
+                </ion-col>
+                <ion-col size="size-sm" class="text-center " (click)="onSelectAllWeek()">
+                    <img src="assets/icon/Icon7.png" alt="Huyện Cần Giờ" class="allweek" />
+                </ion-col>
+
+            </ion-row>
+        </ion-grid>
+    </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true">
+
+    <ion-row class="calendar-wrap">
+        <ion-button size="small"
+                    *ngFor="let item of allDayOfWeek"
+                    color="{{ item.number === currentDay ? 'primary' : 'light' }}"
+                    (click)="loadSchedule(item.number.toString())">
+            {{
+          item.day.replace("Thứ ", "T.").replace("Chủ Nhật", "CN")
+            }}
+        </ion-button>
+    </ion-row>
+    <div *ngIf="isAllweek  == 0"   >
+        <div *ngIf="isLoading" class="ion-padding custom-skeleton">
+            <ion-list>
+                <ion-list-header>
+                    <ion-label>
+                        <ion-skeleton-text animated style="width: 20%"></ion-skeleton-text>
+                    </ion-label>
+                </ion-list-header>
+                <ion-item>
+                    <ion-thumbnail slot="start">
+                        <ion-skeleton-text animated></ion-skeleton-text>
+                    </ion-thumbnail>
+                    <ion-label>
+                        <h3>
+                            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+                        </h3>
+                        <p>
+                            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+                        </p>
+                        <p>
+                            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                        </p>
+                    </ion-label>
+                </ion-item>
+                <ion-item>
+                    <ion-thumbnail slot="start">
+                        <ion-skeleton-text animated></ion-skeleton-text>
+                    </ion-thumbnail>
+                    <ion-label>
+                        <h3>
+                            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+                        </h3>
+                        <p>
+                            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+                        </p>
+                        <p>
+                            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                        </p>
+                    </ion-label>
+                </ion-item>
+                <ion-item>
+                    <ion-thumbnail slot="start">
+                        <ion-skeleton-text animated></ion-skeleton-text>
+                    </ion-thumbnail>
+                    <ion-label>
+                        <h3>
+                            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+                        </h3>
+                        <p>
+                            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+                        </p>
+                        <p>
+                            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                        </p>
+                    </ion-label>
+                </ion-item>
+            </ion-list>
+        </div>
+
+        <ion-card *ngFor="let item of schedulesSelected"
+                  (click)="viewDetailSchedule(item)">
+            <ion-item lines="none">
+                <ion-card-subtitle class="schedule-time" slot="start">Lúc {{ item.scheduleTime }}</ion-card-subtitle>
+                <ion-label class="schedule-pass"
+                           slot="end" *ngIf=" timeCalculator(item).time == 'Đã qua'  || timeCalculator(item).time == 'Lịch bị hoãn' "
+                           color="{{ timeCalculator(item).color }}">{{ timeCalculator(item).time }}</ion-label>
+            </ion-item>
+            <ion-label class="schedule-position">{{ item.schedulePosition }}</ion-label>
+            <ion-card-content>
+                <div>
+                    <p>
+                        <strong>{{ item.scheduleTitle }}</strong>
+                    </p>
+                </div>
+                <!--<div *ngIf="item.scheduleContent">
+                    <b>Nội dung: </b>
+                    <p [innerHTML]="item.scheduleContent"></p>
+                </div>-->
+                <p *ngIf="item.officerName">
+                    Chủ trì:
+                    <span>{{ item.officerName }}</span>
+                </p>
+                <p *ngIf="item.departmentPrepare">
+                    Chuẩn bị:
+                    <span>{{ item.departmentPrepare }}</span>
+                </p>
+                <p *ngIf="item.participantDisplay">
+                    Tham dự: {{ item.participantDisplay }}
+                </p>
+                <p *ngIf="item.otherLocation">Địa điểm: {{ item.otherLocation }}</p>
+                <div class="text-right">
+                    <ng-template [ngIf]="item.isHasFilesAttachment"> 
+                        <i class="fa-lg fas fa-paperclip primary  text-primary ml-2 "></i>
+                    </ng-template>
+
+                    <!--<ng-template [ngIf]="item.scheduleStatus === scheduleStatus.Approve">
+                        <i class="fa-lg fas fa-check-square primary text-primary"> </i>
+                    </ng-template>-->
+
+                    <ng-template [ngIf]="item.scheduleStatus === scheduleStatus.Release">
+                        <i class="fa-lg fas fa-check-square primary text-primary ml-2 "> </i>
+                    </ng-template>
+
+                    <ng-template [ngIf]="item.scheduleStatus === scheduleStatus.Pause">
+                        <i class="fa-lg fas fa-pause primary text-warning ml-2 "> </i>
+                    </ng-template>
+
+                    <ng-template [ngIf]="item.scheduleStatus === scheduleStatus.Changed">
+                        <i class="fa-lg fas fa-exchange-alt text-status-change text-primary ml-2 "> </i>
+                    </ng-template>
+
+                    <ng-template [ngIf]="item.isSendSMSInvite">
+                        <i class="fa-lg fas fa-paper-plane ml-2 text-primary"></i>
+                    </ng-template>
+
+                    <ng-template [ngIf]="item.isChangeLocation">
+                        <i class="fa-lg fas fa-map-marker-alt ml-2 text-danger"
+                           title="Đã thay đổi địa điểm"></i>
+                    </ng-template>
+                </div>
+            </ion-card-content>
+        </ion-card>
+    </div>
+    <div *ngIf="isAllweek == 1" class="allweekdiv">
+        <div *ngFor="let item of schedules">
+            <table class="table table-bordered">
+                <thead>
+                    <tr class="weekTit">
+                        <td colspan="2">{{item.dayOfWeek}}</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="weekMor" *ngFor="let itemM of item.morning" (click)="viewDetailSchedule(itemM)">
+                        <td>{{itemM.scheduleTime}} </td>
+                        <td>
+                            {{itemM.scheduleTitle}}
+                        </td>
+                    </tr>
+                    <tr class="weekAft" *ngFor="let itemA of item.afternoon" (click)="viewDetailSchedule(itemA)">
+                        <td>{{itemA.scheduleTime}} </td>
+                        <td>
+                            {{itemA.scheduleTitle}}
+                        </td>
+                    </tr>
+                    <tr class="weekEve" *ngFor="let itemA of item.evening" (click)="viewDetailSchedule(itemA)">
+                        <td>{{itemA.scheduleTime}} </td>
+                        <td>
+                            {{itemA.scheduleTitle}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="no-item" *ngIf="!isLoading && schedules.length === 0">
+        Không có lịch họp nào cả, xin vui lòng chọn ngày khác!
+    </div>
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content pullingIcon="chevron-down-circle-outline"
+                               pullingText="Kéo để làm mới"
+                               refreshingSpinner="circles"
+                               refreshingText="Đang tải...">
+        </ion-refresher-content>
+    </ion-refresher> 
+</ion-content>
+<div *ngIf="isAllweek  == 0" class="tab-bottom"
+     style="
+    position: fixed;
+    bottom: -1px !important;
+    left: 0px;
+    display: flex !important;
+    justify-content: space-between !important;
+    width: 100%;
+    z-index: 999;
+    background: #fff;
+  ">
+    <ion-tab-button [ngClass]="{ 'tab-selected': tabSelected === 'morning' }"
+                    (click)="selectSchedule('morning')">
+        <ion-icon name="partly-sunny-outline"></ion-icon>
+        <ion-label>Sáng</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button [ngClass]="{ 'tab-selected': tabSelected === 'afternoon' }"
+                    (click)="selectSchedule('afternoon')">
+        <ion-icon name="sunny-outline"></ion-icon>
+        <ion-label>Chiều</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button [ngClass]="{ 'tab-selected': tabSelected === 'evening' }"
+                    (click)="selectSchedule('evening')">
+        <ion-icon name="moon-outline"></ion-icon>
+        <ion-label>Tối</ion-label>
+    </ion-tab-button>
+</div>

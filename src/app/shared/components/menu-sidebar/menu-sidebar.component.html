@@ -1,0 +1,22 @@
+<ion-menu contentId="main-content-folder" type="overlay">
+  <ion-content>
+    <ion-list id="inbox-list">
+      <!-- <ion-list-header>{{ user.displayName }}</ion-list-header>
+      <ion-note>{{ user.position }}</ion-note> -->
+
+      <ion-menu-toggle auto-hide="false" *ngFor="let p of categories; let i = index">
+        <ion-item routerDirection="root" [routerLink]="generateCategoryLink(p)" lines="none" detail="false">
+          <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
+          <ion-label title="{{ p.categoryName }}">{{ p.categoryName }}</ion-label>
+        </ion-item>
+      </ion-menu-toggle>
+
+      <ion-menu-toggle auto-hide="false">
+        <ion-item (click)="login()" lines="none">
+          <ion-icon slot="start" [ios]="'log-out-outline'" [md]="'log-out-sharp'"></ion-icon>
+          <ion-label>Đăng nhập</ion-label>
+        </ion-item>
+      </ion-menu-toggle>
+    </ion-list>
+  </ion-content>
+</ion-menu>

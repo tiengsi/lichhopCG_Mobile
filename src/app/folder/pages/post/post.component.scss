@@ -1,0 +1,17 @@
+ion-content {
+    .no-item {
+        text-align: center;
+        margin-top: 40px;
+        font-size: 14px;
+        font-weight: 300;
+        padding: 0px 10px;
+        color: var(--ion-color-warning-shade);
+    }
+
+    ion-card-title {
+        font-size: 15px;
+        a {
+            text-decoration: none;
+        }
+    }
+}

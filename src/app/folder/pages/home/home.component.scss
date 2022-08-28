@@ -1,0 +1,175 @@
+ion-grid {
+    ion-row {
+        //border-bottom: 1px solid #ccc;
+        .week {
+            font-size: 13px;
+            line-height: 17px;
+            color: red;
+            font-weight: 700;
+        }
+
+        ion-select {
+            margin: 0 auto;
+        }
+    }
+}
+
+ion-card {
+    border-radius: 12px;
+    margin: 8px;
+
+    ion-card-content {
+        padding: 7px 16px;
+        font-size: 13px;
+        font-weight: 300;
+        background: #e8e8f3;
+    }
+
+    ion-item {
+        --ion-background-color: #fbf2e0 !important;
+
+        ion-label {
+            text-align: right;
+            margin: 0;
+            font-size: 13px;
+        }
+
+        .schedule-time {
+            color: #3880ff;
+        }
+
+        .schedule-pass {
+            font-weight: 500;
+            font-size: 13px;
+        }
+
+        .schedule-host {
+            margin-bottom: 5px;
+        }
+    }
+
+    .schedule-position {
+        font-weight: 400;
+        text-align: left;
+        font-size: 13px;
+        padding-left: 16px;
+        display: block;
+    }
+}
+
+.no-item {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 14px;
+    font-weight: 300;
+    padding: 0px 10px;
+    color: var(--ion-color-warning-shade);
+}
+
+ion-tab-button.tab-selected {
+    ion-icon {
+        color: #3880ff;
+    }
+
+    ion-label {
+        color: #3880ff;
+    }
+}
+
+.tab-selected {
+    color: var(--color-selected);
+    border-top: 2px solid #3880ff;
+}
+
+.item-native {
+    background: #fbf2e0 !important;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif !important;
+}
+
+ion-content {
+    --ion-background-color: rgb(182, 224, 177);
+    --padding-bottom: 60px;
+}
+
+.tuan span {
+    border-radius: 40%;
+    border-radius: 20%;
+    /* background: white; */
+    padding-left: 5px;
+    padding-right: 5px;
+    margin: 4px;
+    /* color: #3300ff; */
+    text-align: center;
+}
+
+.tuan span.selected {
+    border-radius: 40%;
+    border-radius: 20%;
+    background: white;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin: 4px;
+    /* color: #3300ff; */
+    text-align: center;
+}
+
+.calendar-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: -1px;
+    padding-top: 5px;
+
+    .btn-calendar {
+        width: 45px;
+        height: 35px;
+    }
+}
+
+.search {
+    color: #fff;
+}
+
+.icon-search {
+    /* background: #33d331;
+    padding-top: 5px;
+    padding-left: 10px;
+    padding-bottom: 3px;
+    display: block;
+    width: 35px;*/
+}
+
+.allweek {
+    width: 40px;
+    height: 40px;
+
+}
+
+.weekTit {
+    background: #09638f;
+    color: #fff;
+    text-align: center;
+}
+
+.weekMor {
+    background-color: #e9fbf5;
+    font-size: 14px;
+}
+
+.weekAft {
+    background-color: #fbf7d9;
+    font-size: 14px;
+}
+
+.weekEve {
+    background-color: #c4e4ff;
+    font-size: 14px;
+}
+
+.allweekdiv {
+    margin-top: 6px;
+    margin-left: 6px;
+    margin-right: 6px;
+}

@@ -1,0 +1,175 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>{{ pageTitle }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismissModal()">Đóng</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ng-container *ngIf="!!scheduleDetail && tabSelected === 'detail'">
+  <ion-content [fullscreen]="true">
+    <div class="detail-content">
+      <strong>Nội dung: </strong>
+      <span>{{ scheduleDetail.scheduleTitle }}</span>
+      <br />
+      <ng-template [ngIf]="scheduleDetail.scheduleContent">
+        <strong>Chi tiết: </strong>
+        <p [innerHTML]="scheduleDetail.scheduleContent"></p>
+      </ng-template>
+
+      <strong>Ngày họp: </strong>
+      <span>{{ scheduleDetail.scheduleDate | date: "dd/MM/yyyy" }}</span>
+      <br />
+      <strong>Thời gian họp: </strong>
+      <span>{{ scheduleDetail.scheduleTime }}</span>
+      <br />
+      <strong>Người chủ trì: </strong>
+      <span>{{ scheduleDetail.officerName }}</span>
+      <br />
+      <strong>Đồng chủ trì: </strong>
+      <span>{{ scheduleDetail.otherHost }}</span>
+      <br />
+      <strong>Địa điểm: </strong>
+      <span>{{ scheduleDetail.scheduleLocation }}</span>
+      <br />
+      <strong>Chuẩn bị: </strong>
+      <span>{{ scheduleDetail.departmentPrepare }}</span>
+      <br />
+      <strong>Trạng thái: </strong>
+      <span
+        [ngClass]="{
+          'text-primary':
+            scheduleDetail.scheduleStatus === scheduleStatus.Approve,
+          'text-success':
+            scheduleDetail.scheduleStatus === scheduleStatus.Release,
+          'text-danger': scheduleDetail.scheduleStatus === scheduleStatus.Pause,
+          'text-info': scheduleDetail.scheduleStatus === scheduleStatus.Changed
+        }"
+        >{{ mapScheduleStatus(scheduleDetail.scheduleStatus) }}</span
+      >
+      <br />
+
+      <ng-template [ngIf]="scheduleDetail.participantIsSelected.length > 0">
+        <strong>Thành phần tham gia:</strong>
+        <table class="table table-bordered mt-3">
+          <thead>
+            <tr>
+              <td width="5%">STT</td>
+              <td>Cơ quan nhận</td>
+              <td>Người nhận</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="
+                let item of scheduleDetail.participantIsSelected;
+                let i = index
+              "
+            >
+              <td>{{ i + 1 }}</td>
+              <td>{{ item.departmentName }}</td>
+              <td>{{ item.receiverName }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </ng-template>
+    </div>
+  </ion-content>
+</ng-container>
+<ng-container *ngIf="scheduleHistory && tabSelected === 'history'">
+  <ion-content [fullscreen]="true">
+    <h3 *ngIf="scheduleHistory.length == 0" class="bg-light">
+      Chưa có nhật ký nào
+    </h3>
+    <table *ngIf="scheduleHistory.length > 0" class="table table-bordered">
+      <thead>
+        <tr>
+          <td width="5%">STT</td>
+          <td>Lịch sử thay đổi</td>
+          <td width="20%">Thời gian thay đổi</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of scheduleHistory; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>
+            <span
+              [ngClass]="{
+                'text-primary': item.changeTo === 'Tạo mới',
+                'text-success': item.changeTo === 'Đã phát hành',
+                'text-danger': item.changeTo === 'Lịch bị hoãn',
+                'text-primary': item.changeTo === 'Đã duyệt',
+                'text-muted': item.changeTo === 'Đang soạn thảo'
+              }"
+            >
+              {{ item.changeTo }}
+            </span>
+          </td>
+          <td>{{ item.changeDate | date: "dd/MM/yyyy hh:mm a" }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </ion-content>
+</ng-container>
+<ng-container
+  *ngIf="scheduleFilesAttachment && tabSelected === 'filesAttachment'"
+>
+  <ion-content [fullscreen]="true">
+    <p *ngIf="scheduleFilesAttachment.length == 0" class="bg-light">
+      Chưa có tài liệu nào
+    </p>
+
+    <ion-card class="e-document" *ngFor="let item of scheduleFilesAttachment; let i = index" (click)="showFileContent(item.filePath)">
+      <ion-item >
+        <ion-label><strong>{{ item.quote }}</strong></ion-label>
+      </ion-item>
+      <ion-card-content>
+        <!-- <strong>Tên tài liệu: </strong> <span>{{ item.fileName }}</span>
+        <br /> -->
+        <strong>Số ký hiệu: </strong> <span>{{ item.notationNumber }}</span>
+        <br />
+        <strong>Ngày phát hành: </strong>
+        <span>{{ item.releaseDate | date: "dd/MM/yyyy" }}</span>
+        <br />
+        <strong>Trích yếu: </strong> <span>{{ item.quote }}</span>
+        <br />
+      </ion-card-content>
+    </ion-card>
+  </ion-content>
+</ng-container>
+<div
+  class="tab-bottom"
+  style="
+    position: fixed;
+    bottom: -1px !important;
+    left: 0px;
+    display: flex !important;
+    justify-content: space-between !important;
+    width: 100%;
+    z-index: 999;
+    background: #fff;
+  "
+>
+  <ion-tab-button
+    [ngClass]="{ 'tab-selected': tabSelected === 'detail' }"
+    (click)="selectSchedule('detail')"
+  >
+    <ion-icon name="calendar-outline"></ion-icon>
+    <ion-label>Chi tiết</ion-label>
+  </ion-tab-button>
+
+  <ion-tab-button
+    [ngClass]="{ 'tab-selected': tabSelected === 'history' }"
+    (click)="selectSchedule('history')"
+  >
+    <ion-icon name="newspaper-outline"></ion-icon>
+    <ion-label>Lịch sử</ion-label>
+  </ion-tab-button>
+  <ion-tab-button
+    [ngClass]="{ 'tab-selected': tabSelected === 'filesAttachment' }"
+    (click)="selectSchedule('filesAttachment')"
+  >
+    <ion-icon name="attach-outline"></ion-icon>
+    <ion-label>Tài liệu họp</ion-label>
+  </ion-tab-button>
+</div>
